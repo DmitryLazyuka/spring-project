@@ -23,14 +23,14 @@ public class SpringProjectApplication {
         return new CommandLineRunner() {
             @Override
             public void run(String... args) throws Exception {
-                Book book = Book.builder()
-                        .isbn("978-0-385-12167-5")
-                        .title("The Shining")
-                        .author("Stephen King")
-                        .price(BigDecimal.valueOf(45.98))
-                        .description("horror novel by American author Stephen King")
-                        .coverImage("https://en.wikipedia.org/wiki/File:The_Shining_(1977)_front_cover,_first_edition.jpg")
-                        .build();
+                Book book = new Book();
+                book.setIsbn("978-0-385-12167-5");
+                book.setTitle("The Shining");
+                book.setAuthor("Stephen King");
+                book.setPrice(BigDecimal.valueOf(45.98));
+                book.setDescription("horror novel by American author Stephen King");
+                book.setCoverImage("https://en.wikipedia.org/wiki/File:The_Shining_(1977)_front_cover,_first_edition.jpg");
+
                 bookService.save(book);
                 System.out.println(bookService.findAll());
             }
