@@ -1,6 +1,7 @@
 package org.example.springproject.service;
 
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.example.springproject.dto.BookDto;
 import org.example.springproject.dto.CreateBookRequestDto;
@@ -34,5 +35,29 @@ public class BookServiceImpl implements BookService {
         Book book = bookRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("There is no book with id " + id));
         return bookMapper.toBookDto(book);
+    }
+
+    @Override
+    public BookDto update(Long id, CreateBookRequestDto requestDto) {
+        Optional<Book> optionalBook = bookRepository.findById(id);
+
+        if (optionalBook.isEmpty()) {
+            throw new EntityNotFoundException("Book not found with id: " + id);
+        }
+        Book book = optionalBook.get();
+        book.setTitle(requestDto.getTitle());
+        book.setAuthor(requestDto.getAuthor());
+        book.setPrice(requestDto.getPrice());
+        book.setCoverImage(requestDto.getCoverImage());
+        book.setDescription(requestDto.getDescription());
+        book.setIsbn(requestDto.getIsbn());
+
+        Book updatedBook = bookRepository.save(book);
+        return bookMapper.toBookDto(updatedBook);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        bookRepository.deleteById(id);
     }
 }
