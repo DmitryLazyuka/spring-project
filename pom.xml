@@ -69,6 +69,15 @@
             <artifactId>liquibase-core</artifactId>
             <version>${liquibase.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator-annotation-processor</artifactId>
+            <version>6.0.11.Final</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -117,7 +126,6 @@
                             <artifactId>lombok</artifactId>
                             <version>${org.projectlombok.version}</version>
                         </path>
-                        <!-- This is needed when using Lombok 1.18.16 and above -->
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok-mapstruct-binding</artifactId>
@@ -135,7 +143,6 @@
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>${liquibase.version}</version>
-                <!-- Конфігурація, якщо необхідно -->
             </plugin>
         </plugins>
     </build>
