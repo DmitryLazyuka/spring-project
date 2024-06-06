@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Positive;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.example.springproject.dto.BookDto;
+import org.example.springproject.dto.BookSearchParametersDto;
 import org.example.springproject.dto.CreateBookRequestDto;
 import org.example.springproject.service.BookService;
 import org.springframework.http.HttpStatus;
@@ -51,5 +52,10 @@ public class BookController {
     @DeleteMapping("/{id}")
     public void deleteBook(@PathVariable @Positive Long id) {
         bookService.deleteById(id);
+    }
+
+    @GetMapping("/search")
+    public List<BookDto> search(BookSearchParametersDto bookSearchParametersDto) {
+        return bookService.search(bookSearchParametersDto);
     }
 }
