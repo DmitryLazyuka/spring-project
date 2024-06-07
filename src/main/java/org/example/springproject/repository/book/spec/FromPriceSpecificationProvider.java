@@ -7,8 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class FromPriceSpecificationProvider implements SpecificationProvider<Book> {
-
-    public static final String FROM_PRICE = "fromPrice";
+    public static final String FROM_PRICE_COLUMN = "fromPrice";
 
     @Override
     public Specification<Book> getSpecification(String[] params) {
@@ -18,6 +17,6 @@ public class FromPriceSpecificationProvider implements SpecificationProvider<Boo
 
     @Override
     public String getKey() {
-        return FROM_PRICE;
+        return FROM_PRICE_COLUMN;
     }
 }
