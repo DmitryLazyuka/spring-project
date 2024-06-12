@@ -17,5 +17,6 @@ public interface BookService {
 
     void deleteById(Long id);
 
-    List<BookDto> search(BookSearchParametersDto bookSearchParametersDto);
+    List<BookDto> search(BookSearchParametersDto bookSearchParametersDto,
+                         Pageable pageable);
 }

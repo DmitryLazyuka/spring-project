@@ -10,7 +10,9 @@ import org.example.springproject.dto.BookDto;
 import org.example.springproject.dto.BookSearchParametersDto;
 import org.example.springproject.dto.CreateBookRequestDto;
 import org.example.springproject.service.BookService;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,7 +35,7 @@ public class BookController {
 
     @Operation(summary = "Get all books")
     @GetMapping
-    public List<BookDto> getAll(Pageable pageable) {
+    public List<BookDto> getAll(@ParameterObject @PageableDefault Pageable pageable) {
         return bookService.findAll(pageable);
     }
 
@@ -65,7 +67,8 @@ public class BookController {
 
     @Operation(summary = "Search book", description = "Search book by Author, Title or price ")
     @GetMapping("/search")
-    public List<BookDto> search(BookSearchParametersDto bookSearchParametersDto) {
-        return bookService.search(bookSearchParametersDto);
+    public List<BookDto> search(BookSearchParametersDto bookSearchParametersDto,
+                                @ParameterObject @PageableDefault Pageable pageable) {
+        return bookService.search(bookSearchParametersDto, pageable);
     }
 }
