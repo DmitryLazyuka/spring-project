@@ -1,4 +1,4 @@
-package org.example.springproject.dto;
+package org.example.springproject.dto.book;
 
 import java.math.BigDecimal;
 import lombok.Data;
