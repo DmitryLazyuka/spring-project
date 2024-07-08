@@ -1,5 +1,6 @@
 package org.example.springproject.service.impl;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.springproject.dto.user.UserRegistrationRequestDto;
 import org.example.springproject.dto.user.UserResponseDto;
@@ -17,6 +18,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
 
     @Override
+    @Transactional
     public UserResponseDto register(UserRegistrationRequestDto requestDto)
             throws RegistrationException {
         if (userRepository.findByEmail(requestDto.getEmail()).isPresent()) {
