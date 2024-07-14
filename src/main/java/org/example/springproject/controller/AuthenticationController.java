@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.springproject.dto.user.UserRegistrationRequestDto;
 import org.example.springproject.dto.user.UserResponseDto;
 import org.example.springproject.exception.RegistrationException;
+import org.example.springproject.repository.user.UserRepository;
 import org.example.springproject.service.UserService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthenticationController {
     private final UserService userService;
+    private final UserRepository userRepository;
 
     @PostMapping("/registration")
     @Operation(summary = "Register new User")
