@@ -14,6 +14,7 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,24 +35,28 @@ public class BookController {
     private final BookService bookService;
 
     @Operation(summary = "Get all books")
+    @PreAuthorize("hasRole('USER')")
     @GetMapping
     public List<BookDto> getAll(@ParameterObject @PageableDefault Pageable pageable) {
         return bookService.findAll(pageable);
     }
 
     @Operation(summary = "Get book by id")
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/{id}")
     public BookDto getBookById(@PathVariable @Positive Long id) {
         return bookService.findById(id);
     }
 
     @Operation(summary = "Create new book")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping()
     public BookDto createBook(@RequestBody @Valid CreateBookRequestDto bookDto) {
         return bookService.save(bookDto);
     }
 
     @Operation(summary = "Update existing book")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public BookDto updateBook(@PathVariable @Positive Long id,
                               @RequestBody @Valid CreateBookRequestDto bookDto) {
@@ -60,12 +65,14 @@ public class BookController {
 
     @Operation(summary = "Delete book by id")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public void deleteBook(@PathVariable @Positive Long id) {
         bookService.deleteById(id);
     }
 
     @Operation(summary = "Search book", description = "Search book by Author, Title or price ")
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/search")
     public List<BookDto> search(BookSearchParametersDto bookSearchParametersDto,
                                 @ParameterObject @PageableDefault Pageable pageable) {
