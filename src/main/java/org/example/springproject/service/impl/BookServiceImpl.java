@@ -2,8 +2,10 @@ package org.example.springproject.service.impl;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.example.springproject.dto.book.BookDto;
+import org.example.springproject.dto.book.BookDtoWithoutCategoryIds;
 import org.example.springproject.dto.book.BookSearchParametersDto;
 import org.example.springproject.dto.book.CreateBookRequestDto;
 import org.example.springproject.exception.EntityNotFoundException;
@@ -74,5 +76,12 @@ public class BookServiceImpl implements BookService {
                 bookSpecificationBuilder.build(bookSearchParametersDto);
         return bookRepository.findAll(bookSpecification, pageable).stream()
                 .map(bookMapper::toBookDto).toList();
+    }
+
+    @Override
+    public List<BookDtoWithoutCategoryIds> findByCategoryId(Long categoryId) {
+        return bookRepository.findAllByCategories_Id(categoryId).stream()
+                .map(bookMapper::toDtoWithoutCategories)
+                .collect(Collectors.toList());
     }
 }
