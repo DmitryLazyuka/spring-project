@@ -31,10 +31,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto save(CreateBookRequestDto requestDto) {
-        if (!hasValidCategories(requestDto)) {
-            throw new EntityNotFoundException("Some categories are missing in DB");
-        }
         Book book = bookMapper.dtoToBook(requestDto);
+        book.setCategories(categoriesIdToCategories(requestDto.getCategoryIds()));
         return bookMapper.toBookDto(bookRepository.save(book));
     }
 
@@ -60,10 +58,6 @@ public class BookServiceImpl implements BookService {
             throw new EntityNotFoundException("Book not found with id: " + id);
         }
 
-        if (!hasValidCategories(requestDto)) {
-            throw new EntityNotFoundException("Some listed categories are missing in DB");
-        }
-
         Book book = optionalBook.get();
         book.setId(id);
         book.setTitle(requestDto.getTitle());
@@ -73,7 +67,8 @@ public class BookServiceImpl implements BookService {
         book.setDescription(requestDto.getDescription());
         book.setIsbn(requestDto.getIsbn());
         book.setCategories(requestDto.getCategoryIds()
-                .stream().map(Category::new).collect(Collectors.toSet()));
+                .stream().map(categoryRepository::getReferenceById)
+                .collect(Collectors.toSet()));
 
         Book updatedBook = bookRepository.save(book);
         return bookMapper.toBookDto(updatedBook);
@@ -100,8 +95,9 @@ public class BookServiceImpl implements BookService {
                 .collect(Collectors.toList());
     }
 
-    private boolean hasValidCategories(CreateBookRequestDto requestDto) {
-        Set<Long> categoryIds = requestDto.getCategoryIds();
-        return categoryIds.size() == categoryRepository.countByIds(categoryIds);
+    private Set<Category> categoriesIdToCategories(Set<Long> categoryIds) {
+        return categoryIds.stream()
+                .map(categoryRepository::getReferenceById)
+                .collect(Collectors.toSet());
     }
 }
