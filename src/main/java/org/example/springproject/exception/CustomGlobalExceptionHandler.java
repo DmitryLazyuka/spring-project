@@ -1,7 +1,6 @@
 package org.example.springproject.exception;
 
 import jakarta.validation.ConstraintViolationException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
@@ -54,15 +53,5 @@ public class CustomGlobalExceptionHandler {
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
         body.put("error", ex.getMessage());
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
-    public ResponseEntity<Object> handleSqlIntegrityConstraintViolationException(
-            SQLIntegrityConstraintViolationException ex) {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp",
-                LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
-        body.put("error", ex.getMessage());
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 }

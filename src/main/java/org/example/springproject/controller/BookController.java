@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.example.springproject.dto.book.BookDto;
 import org.example.springproject.dto.book.BookSearchParametersDto;
 import org.example.springproject.dto.book.CreateBookRequestDto;
-import org.example.springproject.repository.category.CategoryRepository;
 import org.example.springproject.service.BookService;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
@@ -34,7 +33,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/books")
 public class BookController {
     private final BookService bookService;
-    private final CategoryRepository categoryRepository;
 
     @Operation(summary = "Get all books")
     @PreAuthorize("hasRole('USER')")

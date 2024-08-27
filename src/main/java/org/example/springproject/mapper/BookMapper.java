@@ -10,6 +10,7 @@ import org.example.springproject.model.Book;
 import org.example.springproject.model.Category;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 @Mapper(config = MapperConfig.class)
@@ -19,6 +20,10 @@ public interface BookMapper {
     Book dtoToBook(CreateBookRequestDto requestDto);
 
     BookDtoWithoutCategoryIds toDtoWithoutCategories(Book book);
+
+    @Mapping(target = "id", ignore = true)
+    void updateBookFromDto(CreateBookRequestDto requestDto,
+                               @MappingTarget Book book);
 
     @AfterMapping
     default void setCategoryIds(@MappingTarget BookDto bookDto, Book book) {
@@ -33,11 +38,9 @@ public interface BookMapper {
     @AfterMapping
     default void mapCategoryIdsToCategories(@MappingTarget Book book,
                                             CreateBookRequestDto requestDto) {
-        if (requestDto.getCategoryIds() != null) {
-            Set<Category> categories = requestDto.getCategoryIds().stream()
-                    .map(Category::new)
-                    .collect(Collectors.toSet());
-            book.setCategories(categories);
-        }
+        Set<Category> categories = requestDto.getCategoryIds().stream()
+                .map(Category::new)
+                .collect(Collectors.toSet());
+        book.setCategories(categories);
     }
 }

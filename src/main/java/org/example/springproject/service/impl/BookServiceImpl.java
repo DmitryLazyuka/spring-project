@@ -1,7 +1,6 @@
 package org.example.springproject.service.impl;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -52,26 +51,11 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto update(Long id, CreateBookRequestDto requestDto) {
-        Optional<Book> optionalBook = bookRepository.findById(id);
-
-        if (optionalBook.isEmpty()) {
-            throw new EntityNotFoundException("Book not found with id: " + id);
-        }
-
-        Book book = optionalBook.get();
-        book.setId(id);
-        book.setTitle(requestDto.getTitle());
-        book.setAuthor(requestDto.getAuthor());
-        book.setPrice(requestDto.getPrice());
-        book.setCoverImage(requestDto.getCoverImage());
-        book.setDescription(requestDto.getDescription());
-        book.setIsbn(requestDto.getIsbn());
-        book.setCategories(requestDto.getCategoryIds()
-                .stream().map(categoryRepository::getReferenceById)
-                .collect(Collectors.toSet()));
-
-        Book updatedBook = bookRepository.save(book);
-        return bookMapper.toBookDto(updatedBook);
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Book not found with id: " + id));
+        bookMapper.updateBookFromDto(requestDto, book);
+        book.setCategories(categoriesIdToCategories(requestDto.getCategoryIds()));
+        return bookMapper.toBookDto(bookRepository.save(book));
     }
 
     @Override
