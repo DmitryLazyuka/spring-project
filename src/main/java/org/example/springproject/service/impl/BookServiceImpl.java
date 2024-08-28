@@ -76,7 +76,7 @@ public class BookServiceImpl implements BookService {
     public List<BookDtoWithoutCategoryIds> findByCategoryId(Long categoryId) {
         return bookRepository.findAllByCategories_Id(categoryId).stream()
                 .map(bookMapper::toDtoWithoutCategories)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private Set<Category> categoriesIdToCategories(Set<Long> categoryIds) {
