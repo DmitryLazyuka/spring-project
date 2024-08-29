@@ -2,6 +2,7 @@ package org.example.springproject.service;
 
 import java.util.List;
 import org.example.springproject.dto.book.BookDto;
+import org.example.springproject.dto.book.BookDtoWithoutCategoryIds;
 import org.example.springproject.dto.book.BookSearchParametersDto;
 import org.example.springproject.dto.book.CreateBookRequestDto;
 import org.springframework.data.domain.Pageable;
@@ -19,4 +20,6 @@ public interface BookService {
 
     List<BookDto> search(BookSearchParametersDto bookSearchParametersDto,
                          Pageable pageable);
+
+    List<BookDtoWithoutCategoryIds> findByCategoryId(Long categoryId);
 }
