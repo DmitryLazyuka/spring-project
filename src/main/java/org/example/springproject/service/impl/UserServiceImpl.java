@@ -12,6 +12,7 @@ import org.example.springproject.model.Role;
 import org.example.springproject.model.User;
 import org.example.springproject.repository.role.RoleRepository;
 import org.example.springproject.repository.user.UserRepository;
+import org.example.springproject.service.ShoppingCartService;
 import org.example.springproject.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
+    private final ShoppingCartService shoppingCartService;
 
     @Override
     @Transactional
@@ -37,6 +39,7 @@ public class UserServiceImpl implements UserService {
         roles.add(roleRepository.findByRole(Role.RoleName.USER));
         user.setRoles(roles);
         User savedUser = userRepository.save(user);
+        shoppingCartService.createCart(savedUser);
         return userMapper.toUserResponseDto(savedUser);
     }
 }
