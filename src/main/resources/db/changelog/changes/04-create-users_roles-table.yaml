@@ -12,5 +12,3 @@ databaseChangeLog:
               - column:
                   name: role_id
                   type: bigint
-
-
