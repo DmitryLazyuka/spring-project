@@ -42,7 +42,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     public ShoppingCartDto addBookToCart(AddToCartRequestDto requestDto, User user) {
         ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(user.getId());
         Book book = bookRepository.findById(requestDto.getBookId())
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Book with ID " + requestDto.getBookId() + " not found"));
         shoppingCart.getCartItems().stream()
                 .filter(item -> item.getBook().getId().equals(requestDto.getBookId()))
                 .findFirst()
@@ -50,16 +51,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                         item.getQuantity() + requestDto.getQuantity()),
                         () -> addCartItemToCart(requestDto, book, shoppingCart));
         return shoppingCartMapper.toDto(shoppingCartRepository.save(shoppingCart));
-    }
-
-    private void addCartItemToCart(AddToCartRequestDto requestDto,
-                                   Book book,
-                                   ShoppingCart shoppingCart) {
-        CartItem cartItem = new CartItem();
-        cartItem.setBook(book);
-        cartItem.setQuantity(requestDto.getQuantity());
-        cartItem.setShoppingCart(shoppingCart);
-        shoppingCart.getCartItems().add(cartItem);
     }
 
     @Override
@@ -84,5 +75,15 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                         "No Cart item with ID " + cartItemId));
         shoppingCart.getCartItems().remove(cartItem);
         cartItemRepository.delete(cartItem);
+    }
+
+    private void addCartItemToCart(AddToCartRequestDto requestDto,
+                                   Book book,
+                                   ShoppingCart shoppingCart) {
+        CartItem cartItem = new CartItem();
+        cartItem.setBook(book);
+        cartItem.setQuantity(requestDto.getQuantity());
+        cartItem.setShoppingCart(shoppingCart);
+        shoppingCart.getCartItems().add(cartItem);
     }
 }
