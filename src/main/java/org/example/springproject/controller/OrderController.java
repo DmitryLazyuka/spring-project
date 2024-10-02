@@ -6,8 +6,8 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.example.springproject.dto.order.OrderDto;
 import org.example.springproject.dto.order.OrderItemDto;
+import org.example.springproject.dto.order.OrderUpdateRequestDto;
 import org.example.springproject.dto.order.PlaceOrderRequestDto;
-import org.example.springproject.dto.order.StatusUpdateRequestDto;
 import org.example.springproject.model.User;
 import org.example.springproject.service.OrderService;
 import org.springframework.http.HttpStatus;
@@ -71,7 +71,7 @@ public class OrderController {
     @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{orderId}")
     @ResponseStatus(HttpStatus.OK)
-    OrderDto updateOrderStatus(@RequestBody StatusUpdateRequestDto request,
+    public OrderDto updateOrderStatus(@RequestBody OrderUpdateRequestDto request,
                                @PathVariable Long orderId) {
         return orderService.updateOrderStatus(orderId, request);
     }
