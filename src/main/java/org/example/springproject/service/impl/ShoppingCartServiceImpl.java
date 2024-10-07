@@ -1,11 +1,11 @@
 package org.example.springproject.service.impl;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.springproject.dto.shoppingcart.AddToCartRequestDto;
 import org.example.springproject.dto.shoppingcart.ShoppingCartDto;
 import org.example.springproject.dto.shoppingcart.UpdateCartItemRequestDto;
+import org.example.springproject.exception.EntityNotFoundException;
 import org.example.springproject.mapper.ShoppingCartMapper;
 import org.example.springproject.model.Book;
 import org.example.springproject.model.CartItem;
@@ -75,6 +75,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                         "No Cart item with ID " + cartItemId));
         shoppingCart.getCartItems().remove(cartItem);
         cartItemRepository.delete(cartItem);
+    }
+
+    @Override
+    public void clearCart(Long userId) {
+        ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId);
+        shoppingCart.getCartItems().clear();
+        shoppingCartRepository.save(shoppingCart);
     }
 
     private void addCartItemToCart(AddToCartRequestDto requestDto,

@@ -54,4 +54,13 @@ public class CustomGlobalExceptionHandler {
         body.put("error", ex.getMessage());
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(OrderProcessingException.class)
+    public ResponseEntity<Object> handleROrderProcessingException(OrderProcessingException ex) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp",
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
+        body.put("error", ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
 }
